@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>购物车全选</title>
+    <link type="text/css" rel="stylesheet" href="reset.css"/>
+    <script src="vue2.6.10.js"></script>
+    <style type="text/css">
+        table{
+            margin:30px auto;
+        }
+        td{
+            padding:5px 10px;
+        }
+        th{
+            padding:5px 10px;
+        }
+        .num{
+            width:30px;
+        }
+        button{
+            padding:5px;
+        }
+        .total{
+
+            color:darkred;
+            font-weight:800;
+        }
+        th{
+            color: #5c6bee;
+        }
+    </style>
+
+</head>
+<body>
+<div id="cart">
+    <table border="1" cellspacing="0"  >
+        <thead>
+        <tr>
+            <th><input type="checkbox" v-model="selectAll" @change="handleChange" >全选</th>
+            <th>商品序号</th>
+            <th>商品编号</th>
+            <th>商品名称</th>
+            <th>商品数量</th>
+            <th>商品单价</th>
+            <th>移出</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr v-for="(item,index) in list" :key="item.id">
+            <td><input type="checkbox" v-model="item.selected"  :key="item.id">选择</td>
+            <td>{{index+1}}</td>
+            <td>{{item.id}}</td>
+            <td>{{item.name}}</td>
+            <td>
+                <button @click="handleReduce(index)">-</button>
+                <input type="text" v-model.number="item.count" class="num">
+                <button @click="handleAdd(index)">+</button>
+            </td>
+            <td>{{item.price}}</td>
+            <td>
+                <button @click="handleRemove(index)">删除</button>
+            </td>
+        </tr>
+        </tbody>
+        <tfoot>
+        <tr v-if="list.length>0">
+            <td colspan="7">总价为：<span class="all">{{sun}}</span>元</td>
+        </tr>
+        <tr v-else>
+            <td colspan="7">此购物车中无商品</td>
+        </tr>
+        </tfoot>
+    </table>
+</div>
+
+<script>
+    new Vue({
+        el:'#cart',
+        data(){
+            return{
+                selectAll:false,
+                list:[{
+                    id:'0001',
+                    name:'iphoneX',
+                    count:1,
+                    price:6188
+                },{
+                    id:'0002',
+                    name:'华为p30',
+                    count:1,
+                    price:5934
+                },{
+                    id:'0003',
+                    name:'小米RedmiBook',
+                    count:1,
+                    price:4299
+                },{
+                    id:'0004',
+                    name:'华为畅享9e',
+                    count:1,
+                    price:799
+                }]
+            }
+        },
+        computed:{
+            sun:function(){
+                var all=0;
+                for (var i=0;i<this.list.length;i++){
+                    all += this.list[i].price * this.list[i].count;
+                }
+                return all;
+            },
+            checkList:function(){
+                var checked=true;
+                this.list.forEach(function(value){
+                    checked*=value.selected;
+                })
+                return checked;
+            }
+        },
+        methods:{
+            handleAdd:function(index){
+                this.list[index].count++;
+            },
+            handleReduce:function(index){
+                this.list[index].count>1?this.list[index].count--:1;
+            },
+            handleRemove:function(index){
+                this.list.splice(index,1);
+            },
+            handleChange:function(){
+                var selectAll = this.selectAll
+                this.list.forEach(function(value){
+                    value.selected = selectAll;
+                })
+            }
+        },
+        watch:{
+            checkList:function(){
+                this.selectAll=this.checkList;
+            }
+        }
+    })
+</script>
+</body>

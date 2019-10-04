@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>选项</title>
+    <script src="vue2.6.10.js"></script>
+    <style type="text/css">
+        *{
+            margin:0px;
+            padding:0px;
+        }
+        #demo1{
+            width:1000px;
+            margin:10px auto;
+        }
+        #bigImg{
+            float:left;
+            margin-right:10px;
+            width: 560px;
+            height: 560px;
+        }
+        .item{
+            width:330px;
+            height: 44px;
+            line-height:44px;
+            border:1px solid #e0e0e0;
+            margin-bottom: 25px;
+            float:left;
+            text-align: center;
+        }
+
+        h2{
+            padding-top: 50px;
+            padding-bottom: 50px;
+        }
+        .item img{vertical-align:middle; margin-right:10px;}
+        .option{ border:1px solid #ff6700;color: #ff6700;}
+    </style>
+</head>
+<body>
+<div id="demo1">
+    <img :src="imgMax" id="bigImg"/>
+    <h2>选择颜色</h2>
+    <div v-for="(item,index) in listFans" :class=['item',{'option':current==index}] @click="handleClick(index)">
+        <img :src="item.imgMin"/>{{item.desc}}</div>
+</div>
+<script>
+    new Vue({
+        el:'#demo1',
+        data:{
+            current:0,
+            imgMax:'images/冰川蓝.jpg',
+            listFans:[{desc:'冰川蓝',
+                imgMin:'images/冰川蓝-1.jpg',
+                imgMax:'images/冰川蓝.jpg'},
+
+                {desc:'蜜语白',
+                    imgMin:'images/蜜语白-1.jpg',
+                    imgMax:'images/蜜语白.jpg'},
+
+                {desc:'碳纤黑',
+                    imgMin:'images/碳纤黑-1.jpg',
+                    imgMax:'images/碳纤黑.jpg'},
+
+                {desc:'火焰红',
+                    imgMin:'images/火焰红-1.jpg',
+                    imgMax:'images/火焰红.jpg'}]
+        },
+        methods:{
+            handleClick:function(index){
+                this.current = index;
+                this.imgMax = this.listFans[index].imgMax;
+            }
+        }
+    })
+</script>
+</body>
+</html>
